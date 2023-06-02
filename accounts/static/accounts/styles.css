@@ -1,0 +1,57 @@
+.about {
+    overflow: scroll;
+    border: 2px groove #565c8a;
+    max-height: 60vh;
+    padding: 5px;
+}
+
+#profile_pic {
+    width: 180px;
+    height: 180px;
+    border-radius: 5px;
+    border: 2px dashed #0099cc;
+    padding: 5px;
+}
+
+hr.user_profile {
+    border: 1px solid #d9e6f2;
+}
+
+i.fa-pen {
+    cursor: pointer;
+    padding: 2px;
+    color: #0099cc;
+    border: 1px solid #11ffcc;
+    border-radius: 5px;
+}
+
+#drop_div {
+    text-align: center !important;
+
+}
+
+.dropzone {
+    width: auto !important;
+    height: auto;
+    color: #11ffcc;
+    border: 2px dashed #0099cc !important;
+    border-radius: 50px;
+}
+
+.form_input {
+    float: right;
+}
+
+#delete_prompt {
+    text-align: center !important;
+}
+
+#profile_picture {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.blue {
+    color: blue;
+}

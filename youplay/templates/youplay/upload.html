@@ -1,0 +1,64 @@
+{% extends 'youplay/layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+YouPlay: Upload Video
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+
+    <!-- Upload modal -->
+    <!-- Setting the data-backdrop to 'static' and data-keyboard to 'false' 
+        so that the modal doesn't close when clicked outside or escape is pressed  -->
+    <div class="modal fade" id="uploadModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Upload Your Video Here.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="top" class="m-2"></div>
+                    <div class="progress_wrapper text-center mt-3 mb-3 d-none">
+                        <!-- Shows a progress bar for the upload -->
+                        <div class="progress" style="height:20px;" id="progress_bar"></div>
+                        <small class="text-secondary mt-1 mb-2">It may take a while for the video to be processed after
+                            the
+                            upload is complete.</small>
+                    </div>
+
+                    <!-- Displays a success message when the upload is complete -->
+                    <div class="text-center">
+                        <div id="progress_end" class="d-none alert-success mt-2">The video is successfully uploaded and
+                            processed.</div>
+                    </div>
+                    <!-- Upload Form -->
+                    <form id="upload_form" class="m-3" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in uploadForm %}
+                        {{ field|as_crispy_field }}
+                        {% endfor %}
+                        <div id="upload_button_div" style="text-align:center;"><input id="upload_button"
+                                class="btn btn-primary mt-2" type="submit" value="Upload">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-none">
+                    <button id="close_btn" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}
+{% block script %}
+{{ block.super }}
+<script src="{% static 'youplay/upload_page.js' %}"></script>
+{% endblock %}

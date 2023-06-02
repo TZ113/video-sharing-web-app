@@ -1,0 +1,6 @@
+
+*.txt
+!requirements.txt
+uploads/
+*.env
+youplay_venv/

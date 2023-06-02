@@ -1,0 +1,44 @@
+{% extends 'youplay/layout.html' %}
+{% load static %}
+
+{% block title %}
+Profiles: {{user_data.username|title}}
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <!-- Shows profile information about the selected user -->
+    <div class="mt-4 mb-4"><img id="profile_picture" src="{{MEDIA_URL}}{{user_data.profile.profile_picture}}"
+            alt="profile picture" class="mr-2 mb-3"><span id="profile_name_other">{{user_data.username|title}}</span>
+    </div>
+    <!-- Number of subscribers -->
+    <div class="m-2"><b>Subscribers:</b> <span>{{total_subscribers}}</span>
+        <!-- Subscribe/Unsubscribe button for the current user -->
+        {% csrf_token %}
+        {% if current_user_subscribed == True %}
+        <button class="btn btn-primary subscription" style="margin-left:50px;">Unsubscribe</button>
+        <!-- Id of the selected user (hidden) -->
+        <span hidden>{{user_data.id}}</span>
+    </div>
+    {% else %}
+    <button class="btn btn-primary subscription" style="margin-left:50px;">Subscribe</button>
+    <span hidden>{{user_data.id}}</span>
+</div>
+{% endif %}
+</div>
+<hr>
+<!-- About info of the selected user -->
+<p><span class="ml-2 mr-4">About:
+        <div class="vid_description">{% autoescape off %}{{ user_data.profile.about | linebreaks }}{% endautoescape %}
+        </div>
+</p>
+
+<hr>
+<!-- Uploaded videos of the selected user -->
+<div class="videos"></div>
+
+{% endblock body %}
+{% block script %}
+{{ block.super }}
+{% endblock %}

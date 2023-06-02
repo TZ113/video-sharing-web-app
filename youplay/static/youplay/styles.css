@@ -1,0 +1,272 @@
+#s1 {
+    color: #00ff00;
+    font-size: 22px;
+    margin: 2px;
+}
+
+#s2 {
+    color: #e4260d;
+    font-size: 19px;
+    margin-right: 2px;
+}
+
+#s3 {
+    color: #99ff33;
+    font-size: 20px;
+    margin: 1px;
+}
+
+#s4 {
+    color: #fff000;
+    font-size: 22px;
+}
+
+#nav-profile {
+    color: #33bbff;
+    font-weight: 1000;
+    font-stretch: ultra-expanded;
+    margin-right: 10px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#mySidebar {
+    display: none;
+    width: 250px;
+}
+
+.videos {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    margin: 20px;
+}
+
+.video {
+    margin: 40px;
+    color: gray !important;
+    text-decoration: none !important;
+}
+
+.video img {
+    border-radius: 5%;
+}
+
+@media screen and (max-width:400px) {
+    .video {
+        margin: 10px;
+        ;
+    }
+
+    .video img {
+        max-width: 100%;
+        height: 70%;
+    }
+
+    .video div {
+        max-width: 100%;
+    }
+}
+
+#video_container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid lightgray;
+    margin: 10px;
+    padding: 5px;
+}
+
+.vid_info {
+    float: right;
+    margin-top: 10px;
+    margin-left: 20px;
+    /* align-self: flex-start; */
+}
+
+video {
+    border: 1px solid gray;
+}
+
+@media screen and (max-width:1100px) {
+    video {
+        width: 100%;
+        height: auto;
+    }
+
+    #comment_area {
+        max-width: 99%;
+    }
+}
+
+fieldset {
+    max-width: 47%;
+}
+
+#comment_button {
+    display: block;
+    float: right;
+}
+
+@media screen and (max-width:750px) {
+
+    #comment_form_div {
+        position: relative !important;
+    }
+}
+
+i.fa-heart {
+    color: red;
+    cursor: pointer;
+}
+
+.search_result {
+    margin: 10px;
+    padding: 5px;
+    border: 1 px transparent blue;
+}
+
+.search_result>a {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 19px;
+}
+
+
+.title_flex {
+    width: 300px;
+    font: 18px Arial, sans-serif;
+    color: #1a1a1a;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+pre {
+    font: 17px Arial, sans-serif;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+a#profile_name {
+    color: #4080bf;
+    text-decoration: none;
+    font-size: 28px;
+}
+
+a#subscriber,
+a#subscription {
+    font-size: 19px;
+    text-decoration: none;
+    color: #3366cc;
+}
+
+#search_group {
+    width: 25vw;
+
+
+}
+
+
+.vid_title {
+    max-width: 300px;
+    word-wrap: break-word;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.vid_description {
+    border: 1px solid gray;
+    margin: 10px;
+    padding: 5px;
+    overflow: scroll;
+    width: 99%;
+    max-height: 60vh;
+}
+
+#comments {
+    position: relative;
+    margin-top: 20px;
+    max-width: 99%;
+    background-color: lightblue;
+    border: 1px solid #0099cc;
+    margin-left: 10px;
+    padding: 10px;
+}
+
+.comment_wrapper {
+    border: 1px solid yellowgreen;
+    margin: 5px;
+    background-color: azure;
+}
+
+.comment {
+    margin: 5px;
+    padding: 5px;
+    max-width: fit-content;
+}
+
+.comment a {
+    text-decoration: none;
+}
+
+.uploader {
+    color: #004466;
+    font-size: 20px;
+}
+
+#profile_name_other {
+    font-size: 32px;
+    color: #4080bf;
+}
+
+i.fa-plus {
+    color: #0099cc;
+    margin-left: 7px;
+    font-size: 20px;
+    border: 1px solid #11ffcc;
+    border-radius: 5px;
+    padding: 2px;
+    cursor: pointer;
+    background-color: white;
+}
+
+#username_menu {
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+#dropdownMenuButton::after {
+    content: none;
+}
+
+#mySidebar a,
+.navbar-nav a,
+.modal-body a {
+    text-decoration: none;
+}
+
+.upload_error_message {
+    font-size: small;
+    font-weight: bold;
+    color: #e4260d;
+    margin-top: 4px;
+    margin-bottom: 5px;
+}
+
+#list_videos_top {
+    border: 1px solid #6699ff;
+    width: 95%;
+}
+
+#comments_heading {
+    margin-left: 10px;
+    background-color: cadetblue;
+    width: max-content;
+    color: #1a1a1a;
+}

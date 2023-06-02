@@ -1,0 +1,42 @@
+{% extends "youplay/layout.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block body %}
+{% load socialaccount %}
+{% providers_media_js %}
+<div class="container w-50">
+    <br>
+    <h1 class="text-dark">Sign Up</h1>
+    <hr>
+    {% if message %}
+    <div>{{ message }}</div>
+    {% endif %}
+    <!--Sign up option with google and facebook-->
+    <div style="text-align:center"><a href="{% provider_login_url 'google' %}" class="text-dark"><img
+                src="{% static 'signup with google.jpg' %}" style='width:16rem; height:auto'></a>
+        <a href="{% provider_login_url 'facebook' method='js_sdk' %}"><img style="width:16rem; height:11rem;"
+                src="{% static 'facebook-sign-up.png' %}"></a>
+    </div>
+    <div style="width: 100%; height: 15px; border-bottom: 1px solid lightgray; text-align: center">
+        <span class="text-muted"
+            style="margin-top:-15% !important; font-size: 11px; background-color: white; padding: 0px 10px;">
+            OR
+        </span>
+    </div>
+    <br>
+    <!--User registration form-->
+    <form action="{% url 'accounts:register' %}" method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <div style="text-align:center;"><input class="btn btn-primary" type="submit" value="Sign Up"></div>
+    </form>
+    <div style="text-align:center; margin-top: 10px; margin-bottom:10px;">
+        Already have an account? <a class="blue" href="{% url 'accounts:login' %}">Sign In here.</a>
+    </div>
+    <br><br>
+</div>
+{% endblock %}
+{% block script %}
+{{ block.super }}
+{% endblock %}

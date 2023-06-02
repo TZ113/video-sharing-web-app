@@ -1,0 +1,74 @@
+{% extends 'youplay/layout.html' %}
+{% load static %}
+
+{% block body %}
+<!--Modal for deleting playlist-->
+<div class="modal fade" id="deletePlaylistModal" tabindex="-1" role="dialog" aria-labelledby="deletePlaylistModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePlaylistModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center mb-2">
+                <!-- Prompt for the uploader if the delete button is clicked -->
+                <div class="mb-4">Are you sure you want to delete this playlist?</div>
+                <!-- Yes button completes the deletion -->
+                <button id="delete_playlist_yes" class="btn btn-danger ml-4 mr-4 w-25">Yes</button>
+                {% csrf_token %}
+                <!-- No button returns to the state before clicking the delete button -->
+                <button id="no" class="btn btn-secondary w-25"
+                    onclick="$('#deletePlaylistModal').modal('toggle');">No</button>
+            </div>
+            <div class="modal-footer d-none">
+                <button id="close_btn" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1 data-toggle="tooltip" data-placement="top" id="title" class="ml-5 text-info"></h1>
+        </div>
+        <div class="col text-center mt-4">
+            <button id="delete_playlist_button" data-toggle="modal" data-target="#deletePlaylistModal"
+                class="btn btn-md btn-danger d-none">Delete</button>{% csrf_token %}
+        </div>
+    </div>
+    <hr id="list_videos_top">
+
+</div>
+<!--List the videos here-->
+<div class="videos"></div>
+{% endblock body %}
+{% block script %}
+{{ block.super }}
+<script>
+    // Delete a playlist
+    document.getElementById('delete_playlist_yes').addEventListener('click', (evt) => {
+        const name = title.title;
+        console.log(name);
+
+        // Send a DELETE request to the server for the specific playlist 
+        fetch(`/home/delete_playlist/${name}`, {
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken': evt.target.nextElementSibling.value
+            }
+        })
+            .then(response => {
+                // If a success code is returned, redirect to homepage with a success message
+                if (response.status === 204) {
+                    location.href = `/home?message=Playlist successfully deleted.`;
+                } else {
+                    console.log(response.status);
+                }
+            })
+            .catch(error => console.log(error))
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends 'youplay/layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
+<!-- Prompt modal for deleting a video -->
+<div class="modal fade" id="deleteVideoModal" tabindex="-1" role="dialog" aria-labelledby="deleteVideoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteVideoModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center mb-2">
+                <!-- Prompt for the uploader if the delete video button is clicked -->
+                <div class="mb-4">Are you sure you want to delete this video?</div>
+                <!-- Yes button completes the deletion -->
+                <button id="delete_video_yes" class="btn btn-danger ml-4 mr-4 w-25">Yes</button>
+                {% csrf_token %}
+                <!-- No button returns to the state before clicking the delete video button -->
+                <button id="no" class="btn btn-secondary w-25"
+                    onclick="$('#deleteVideoModal').modal('toggle');">No</button>
+            </div>
+            <div class="modal-footer d-none">
+                <button id="close_btn" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="video_container">
+    <!-- Video id for usage in JavaScript (hidden) -->
+    <div id="video_id" hidden>{{video_data.id}}</div>
+
+    {% if video_data.processing == True %}
+    <!-- Video is still being processed -->
+    <video width="70%" height="500" controls preload="auto" poster="{{MEDIA_URL}}processing(high_res).jpg">
+        <source src="" type="video/mp4">
+    </video>
+    <div class="vid_info">
+        <!-- Title of the video -->
+        <div class="vid_title">{{video_data.title | title}}</div>
+        <!-- Uploader information -->
+        <p>
+        <div>Uploaded by:</div>
+        <div class="mt-2 ml-4">
+            {% if video_data.uploader == user %}
+            <!-- If the uploader is the current user this links to a page where the user can edit the profile -->
+            <a id="profile_name" href="{% url 'accounts:user_profile' %}"><img id="profile_picture"
+                    src="{{MEDIA_URL}}{{video_data.uploader.profile.profile_picture}}" alt="profile picture"
+                    class="mr-3">{{video_data.uploader.username|title}}</a>
+            {% else %}
+            <!-- If not, it links to a different profile page -->
+            <a id="profile_name" href="{% url 'youplay:profile' video_data.uploader.id %}"><img id="profile_picture"
+                    src="{{MEDIA_URL}}{{video_data.uploader.profile.profile_picture}}" alt="profile picture"
+                    class="mr-3">{{video_data.uploader.username| title}}</a>
+
+            <!-- Subscribe/Unsubscribe button -->
+            {% csrf_token %}
+            {% if current_user_subscribed == True %}
+            <button class="btn btn-primary ml-4 subscription">UnSubscribe</button>
+            {% else %}
+            <button class="btn btn-primary ml-4 subscription">Subscribe</button>
+            {% endif %}
+            <div hidden>{{video_data.uploader.id}}</div>
+            {% endif %}
+            </p>
+            <div class="mb-2">{{video_data.timestamp}}</div>
+        </div>
+    </div>
+
+    <script>
+        // Checks whether the processing is done and reloads the window in that case
+        fetch(`/home/processing_status?id={{video_data.id}}`)
+            .then(response => {
+                location.reload();
+            })
+    </script>
+
+    {% else %}
+    <!-- Video is not being processed -->
+    <video controls preload="auto" width="70%" height="600">
+        <source src="{% url 'youplay:play_video' video_data.slug %}" type="video/mp4">
+    </video>
+    {% csrf_token %}
+
+    <div class="vid_info">
+        <div class="vid_title">{{video_data.title | title}}
+            <!-- A plus button for adding to playlists -->
+            <i id="video_page_plus" class="fa-solid fa-plus"></i>
+        </div>
+        <p>
+        <div>Uploaded by:</div>
+        <div class="mt-2">
+            {% if video_data.uploader == user %}
+            <a id="profile_name" href="{% url 'accounts:user_profile' %}"><img id="profile_picture"
+                    src="{{MEDIA_URL}}{{video_data.uploader.profile.profile_picture}}" alt="profile picture"
+                    class="mr-3">{{video_data.uploader.username|title}}</a>
+            {% else %}
+            <a id="profile_name" href="{% url 'youplay:profile' video_data.uploader.id %}"><img id="profile_picture"
+                    src="{{MEDIA_URL}}{{video_data.uploader.profile.profile_picture}}" alt="profile picture"
+                    class="mr-3">{{video_data.uploader.username| title}}</a>
+
+            {% csrf_token %}
+            {% if current_user_subscribed == True %}
+            <button class="btn btn-primary ml-4 subscription">UnSubscribe</button>
+            {% else %}
+            <button class="btn btn-primary ml-4 subscription">Subscribe</button>
+            {% endif %}
+            <div hidden>{{video_data.uploader.id}}</div>
+            {% endif %}
+        </div>
+        </p>
+        <div class="mb-2">{{video_data.timestamp}}</div>
+        <!-- Displays view count of the video  -->
+        <p><i class="fa-solid fa-eye"></i> <span style="margin-right:15px;" id="views">{{ views }}</span>
+            <!-- Shows likes count and whether the current user likes -->
+            {% if current_user_likes == True %}
+            <!-- Clickable heart for the user -->
+            <i class="fa-solid fa-heart"></i> <span id="likes">{{ total_likes }}</span>
+            {% else %}
+            <i class="fa-regular fa-heart"></i> <span id="likes">{{ total_likes }}</span>
+            {% endif %}{% csrf_token %}
+        </p>
+        {% if user == video_data.uploader %}
+        <!-- Delete video button only for the uploader -->
+        <div><button id='delete_video_button' data-toggle="modal" data-target="#deleteVideoModal"
+                class="btn btn-danger">Delete
+                this video</button></div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+
+<hr>
+{% if video_data.processing == False %}
+{% if video_data.description %}
+<!-- If there's a description for the video shows it -->
+<div class="vid_description">
+    <div id="description_text" class="text-break" style="float:left;">
+        {% autoescape off %}{{video_data.description | linebreaks }} {% endautoescape %}</div>
+    {% if user == video_data.uploader %}
+    <!-- If the uploader is the current user, he can edit the description -->
+    <i style="float:right;" class="fa-solid fa-pen ml-2 edit_video_description"></i>
+    {% endif %}
+</div>
+{% else %}
+{% if user == video_data.uploader %}
+<!-- If there's no description and current user is uploader he can add a description -->
+<div class="ml-3"><button class="btn btn-primary edit_video_description">Add Description</button></div>
+{% endif %}
+{% endif %}
+
+{% if error %}<div id="description_form_error" hidden>{{ error }}</div>{% endif %}
+
+<!-- Video description edit form (hidden) -->
+<div id="div_description_form" class="d-none m-3">
+    <form action="{% url 'youplay:update_video' video_data.id %}" method="POST">
+        {% csrf_token %}
+        {{description_form|crispy}}
+        <input class="btn btn-primary" style="margin-left:auto; display:block;" type="submit" value="Submit">
+    </form>
+</div>
+
+<div class="mt-3">
+    <!-- Comment form for users -->
+    <fieldset class="m-2">
+        <legend>Comment on this video: </legend>
+        <form id="comment_form">
+            {% csrf_token %}
+            <textarea id="comment_area" rows="4" cols="87" maxlength="500" required></textarea>
+            <div id="error_message_div" class="text-danger"></div>
+            <p><small>Your comment cannot be longer than 500 characters!</small></p>
+            <button class="btn btn-primary" id="comment_button">Comment</button>
+        </form>
+    </fieldset>
+</div>
+{% endif %}
+<br>
+<hr>
+<!-- Displays comments -->
+<div id="comments_div" class="d-none">
+    <h2 id="comments_heading">All comments</h2>
+    <div id="comments"></div>
+</div>
+
+{% endblock body %}
+{% block script %}
+{{ block.super }}
+<script src="{% static 'youplay/video_page.js' %}"></script>
+{% endblock %}

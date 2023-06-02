@@ -1,0 +1,12 @@
+Django>=4.1.9
+moviepy>=1.0.3
+Pillow>=9.0.1
+bleach>=5.0.1
+django-allauth>=0.51.0
+django-crispy-forms>=2.0
+crispy_bootstrap4>=2022.1
+django-mailer>=2.2
+django-ranged-response>=0.2.0
+python-dotenv>=1.0.0
+celery>=5.2.7
+django-sslserver>=0.22

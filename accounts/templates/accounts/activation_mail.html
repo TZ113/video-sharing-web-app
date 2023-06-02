@@ -1,0 +1,7 @@
+{% autoescape off %}
+
+Hi, {{user.username}},
+Please, click on this link to confirm the registration for your YouPlay account.
+{{domain}}{% url 'accounts:activate' uidb64=uid token=token %}
+
+{% endautoescape %}
