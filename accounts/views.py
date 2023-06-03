@@ -7,6 +7,7 @@ from django.db.transaction import TransactionManagementError
 from django.http import HttpResponseNotAllowed, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from PIL import Image
@@ -131,7 +132,9 @@ def activate(request, uidb64, token):
             },
         )
     else:
-        return redirect("register", {"message": "Activation link is invalid"})
+        return redirect(
+            reverse("accounts:register", args=("Activation link is invalid",))
+        )
 
 
 @login_required
