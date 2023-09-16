@@ -128,14 +128,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("users")
         get_latest_by = ["date_joined"]
 
-    # def clean(self):
-    #     """Modify this method to sanitize the username and email field using bleach module, and make them case-insensitive."""
-    #     self.username = bleach.clean(
-    #         self.username
-    #     ).lower()  # And how the hell the user will ever log in, genius?
-    #     self.email = bleach.clean(self.email).lower()
-    #     super().clean()
-
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
 
