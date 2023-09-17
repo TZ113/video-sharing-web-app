@@ -92,8 +92,6 @@ def create_directories_and_update_database(created, sender, instance, *args, **k
 
     # Only when the instance is created
     if created:
-        print(f"new user {instance.id} is created")
-
         # Create necessary directories
         create_directories(instance.id)
 

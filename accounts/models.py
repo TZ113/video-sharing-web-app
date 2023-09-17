@@ -52,7 +52,6 @@ class UserManager(BaseUserManager):
             )
 
         user = self.model(username=username, email=email, **extra_fields)
-        print(user)
         user.set_password(password)
         user.save(using=self.db)
         return user
@@ -127,6 +126,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         get_latest_by = ["date_joined"]
+
+    def clean(self):
+        pass
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
