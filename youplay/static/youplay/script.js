@@ -480,5 +480,3 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('.subscription').forEach((elm) => {
     elm.addEventListener('click', subscribeUnsubscribe)
 })
-
-console.log('script');

@@ -77,8 +77,6 @@ class Video(models.Model):
         ),
     )
 
-    # allowed_thumbnail_extensions_default = ["bmp", "dib", "gif", "tif", "tiff", "jfif", "jpe", "jpg", "jpeg", "pbm", "pgm", "ppm", "pnm", "png", "apng", "blp", "bufr", "cur", "pcx", "dcx", "dds", "ps", "eps", "fit", "fits", "fli", "flc", "fpx", "ftc", "ftu", "gbr", "grib", "h5", "hdf", "jp2", "j2k", "jpc", "jpf", "jpx", "j2c", "icns", "ico", "im", "iim", "mic", "mpg", "mpeg", "mpo", "msp", "palm", "pcd", "pdf", "pxr", "psd", "bw", "rgb", "rgba", "sgi", "ras", "tga", "icb", "vda", "vst", "webp", "wmf", "emf", "xbm", "xpm"]
-
     allowed_thumbnail_extensions = ["jpg", "jpeg", "png", "svg", "bmp", "gif", "tiff"]
     thumbnail = models.ImageField(
         upload_to=thumbnail_path,
@@ -121,15 +119,12 @@ class Video(models.Model):
                 try:
                     os.makedirs(path)
                 except (PermissionError, OSError) as e:
-                    print(e)
                     raise Exception(
                         f"An error occurred while trying to create directories:- {e}"
                     )
-        print(f"UUID for video {self.title}:- {self.uuid}")
         # Create a slug from the title and assign it to the slug field
         if not self.slug:
             self.slug = slugify(f"{self.title}-{self.uuid}")
-            print(f"Slug for video {self.title}:- {self.slug}")
 
         super().save()
 
@@ -150,7 +145,7 @@ class Video(models.Model):
             if not is_valid_video(path):
                 raise ValidationError(
                     _("The uploaded file is not a valid video file."),
-                    code="Invalid_video",
+                    code="Invalid_video_file",
                 )
 
     def __str__(self):

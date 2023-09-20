@@ -11,7 +11,7 @@ from .tasks import convert_video
 from .utils import get_output_paths, take_random_snapshots
 
 
-@receiver(pre_delete, sender=Video)
+# @receiver(pre_delete, sender=Video)
 def delete_files_and_directories(sender, instance, *args, **kwargs):
     """Delete video and image files, and directories when a video is being deleted."""
 

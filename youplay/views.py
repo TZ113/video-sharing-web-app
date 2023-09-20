@@ -18,29 +18,7 @@ from .forms import EditDescriptionForm, UploadForm
 from .models import Comment, Like, PlayList, Subscription, Video
 from .utils import make_more_readable
 
-
 # Create your views here.
-def get_data_segment(start, end, items):
-    """Return a list containing a specific number of elements, from start to end, from the querySet items."""
-
-    if len(items) == 0 or len(items) < start:
-        return
-
-    if items.model == Video:
-        for video in items:
-            video.views = make_more_readable(video.views)
-
-    # Create an empty list and appends the specified number of elements to it
-    data = []
-    if len(items) <= end:
-        [data.append(items[i]) for i in range(start, len(items))]
-    else:
-        [data.append(items[i]) for i in range(start, end + 1)]
-
-    time.sleep(1)
-
-    # Return the elements list
-    return data
 
 
 def get_video(video_id):
@@ -119,13 +97,15 @@ def index(request):
         start = int(request.GET.get("start"))
         end = int(request.GET.get("end"))
 
-        videos = Video.objects.all().order_by("-timestamp")
+        # Get the specific range of videos
+        data = Video.objects.all().order_by("-timestamp")[start:end]
 
-        # Get the specific range of videos from the querySet
-        data = get_data_segment(start, end, videos)
+        for vid in data:
+            vid.views = make_more_readable(vid.views)
 
         # If any videos exist within that range, Serialize and return them with a status code 200, else return a status code 204
         if data is not None:
+            time.sleep(1)
             return JsonResponse(
                 {"all": [video.serialize() for video in data]}, status=200
             )
@@ -334,14 +314,12 @@ def add_or_get_comments(request):
         # If none exists return status code 204
         start = int(request.GET.get("start"))
         end = int(request.GET.get("end"))
-        comments = Comment.objects.filter(
+        data = Comment.objects.filter(
             video=Video.objects.get(pk=request.GET.get("video_id"))
-        ).order_by("-timestamp")
+        ).order_by("-timestamp")[start:end]
 
-        data = get_data_segment(start, end, comments)
-
-        time.sleep(1)
         if data is not None:
+            time.sleep(1)
             return JsonResponse(
                 [comment.serialize() for comment in data], safe=False, status=200
             )
@@ -356,9 +334,12 @@ def profile(request, user_id):
     if request.GET.get("start") and request.GET.get("end"):
         start = int(request.GET.get("start"))
         end = int(request.GET.get("end"))
-        videos = Video.objects.filter(uploader=request.user).order_by("-timestamp")
-        data = get_data_segment(start, end, videos)
+        data = Video.objects.filter(uploader=user).order_by("-timestamp")[
+            start:end
+        ]
+
         if data is not None:
+            time.sleep(1)
             return JsonResponse(
                 {"profile": [video.serialize() for video in data]}, status=200
             )
@@ -710,9 +691,10 @@ def list_videos(request, list_name):
     if request.GET.get("start") and request.GET.get("end"):
         start = int(request.GET.get("start"))
         end = int(request.GET.get("end"))
-        data = get_data_segment(start, end, videos)
+        data = videos[start:end]
 
         if data is not None:
+            time.sleep(1)
             return JsonResponse(
                 {list_name: [video.serialize() for video in data]}, status=200
             )
