@@ -17,7 +17,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         """Checks whether an user was created by social login, but still hasn't set a password,
         returns None in that case"""
         if (
-            self.user.socialaccount_set.filter().exists()
+            self.user.socialaccount_set.filter().exists()  # type: ignore
             and not self.user.has_usable_password()
         ):
             return None
@@ -33,7 +33,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["username", "email", "password"]
 
 
 class UsernameChangeForm(forms.ModelForm):

@@ -4,13 +4,9 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage as ds
 from django.core.mail import send_mail
-from django.core.validators import (
-    EmailValidator,
-    FileExtensionValidator,
-    MaxLengthValidator,
-    MinLengthValidator,
-    RegexValidator,
-)
+from django.core.validators import (EmailValidator, FileExtensionValidator,
+                                    MaxLengthValidator, MinLengthValidator,
+                                    RegexValidator)
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -149,14 +145,14 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
 
-    def profile_pic_path(instance, filename):
+    def profile_pic_path(instance, filename): # type: ignore
         """Generates a file path for the users profile picture."""
         filename = ds.get_valid_name(filename)
-        return f"uploads/user_{instance.user_id}/profile_pictures/{filename}"
+        return f"uploads/user_{instance.user_id}/profile_pictures/{filename}" # type: ignore
 
     allowed_extensions = {"jpeg", "jpg", "bitmap", "png", "gif", "tiff"}
     profile_picture = models.ImageField(
-        upload_to=profile_pic_path,
+        upload_to=profile_pic_path, # type: ignore
         blank=True,
         validators=[
             FileExtensionValidator(
