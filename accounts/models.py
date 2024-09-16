@@ -26,13 +26,13 @@ class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         """modify the create_user function so that it only accepts users with an username at least 3 characters long, a valid email and a 8 character long password"""
         if not username or len(username) < 3 or len(username) > 30:
-            raise ValueError(
+            raise ValidationError(
                 _("User must have an username with at least 3 characters.")
             )
         try:
             username_validator(username)
         except ValidationError:
-            raise ValueError(
+            raise ValidationError(
                 _("Besides letters and numbers only _, -, ., @ and spaces are allowed.")
             )
         if not email:
@@ -40,10 +40,10 @@ class UserManager(BaseUserManager):
         try:
             email_validator(email)
         except ValidationError:
-            raise ValueError(_("User must enter a valid email address."))
-        self.normalize_email(email)
+            raise ValidationError(_("User must enter a valid email address."))
+        email = self.normalize_email(email)
         if not password or len(password) < 8:
-            raise ValueError(
+            raise ValidationError(
                 _("User must have a password that is at least 8 characters long")
             )
 
@@ -122,9 +122,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         get_latest_by = ["date_joined"]
-
-    def clean(self):
-        pass
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
